@@ -1,78 +1,111 @@
 using System;
-using System.Dynamic;
+using System.Collections.Generic;
 
 namespace campus
 {
-   public class Grid
-   {
+    public class Grid
+    {
+        private int rows;
+        private int columns;
+        private int[,] grid;
 
-    private int rows;
-    private int columns;
-    private int[,] grid;    
-
-    public Grid(int rows, int columns)
+        public Grid(int rows, int columns)
         {
             this.rows = rows;
             this.columns = columns;
-            grid = new int [rows,columns];
+            grid = new int[rows, columns];
         }
-    
-    public void Clear()
-    {
-        Console.Clear();
-    
-    }
 
-    public void DrawGrid()
-{
-    for (int row = 0; row < rows; row++)
-    {
-        for (int col = 0; col < columns; col++)
+        // public void Clear()
+        // {
+        //     
+        //  Console.Clear();
+        // }
+
+        public int GetRows()
         {
-            if (row == 0 || row == rows - 1 || col == 0 || col == columns - 1)
-            {
-        Console.Write("#");
-            }
-            else
-            {
-                int cellValue = grid[row, col];
+            return rows;
+        }
 
-                switch (cellValue)
+        public int GetColumns()
+        {
+            return columns;
+        }
+
+        public void DrawGrid(Food food, List<int[]> snakeBody)
+        {
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < columns; col++)
                 {
-                    case 0: 
-                        Console.Write(" ");
-                        break;
-                    case 1: 
-                        Console.Write("■");
-                        break;
-                    case 2: 
+                    if (row == food.Row && col == food.Column)
+                    {
                         Console.Write("F");
-                        break;
-                    
+                    }
+                    else if (row == 0 || row == rows - 1 || col == 0 || col == columns - 1)
+                    {
+                        Console.Write("#");
+                    }
+                    else
+                    {
+
+                        int cellValue = grid[row, col];
+                        if (cellValue == 1)
+                        {
+                            Console.Write("■");
+                        }
+                        else if (cellValue == 2)
+                        {
+                            Console.Write("■");
+                        }
+                        else
+                        {
+                            Console.Write(" ");
+                        }
+                    }
                 }
+                Console.WriteLine();
             }
         }
-        Console.WriteLine(); // Move to the next row
-    }
-}
 
-
-    public void SetCell(int row, int col, int value)
-    {
-        if(row>=0 && row < rows && col >= 0 && col< columns)
+        public void SetCell(int row, int col, int value)
         {
-                grid[row,col] = value;
+            if (row < 0)
+            {
+                row = GetRows() - 1;
+            }
+            else if (row >= GetRows())
+            {
+                row = 0;
+            }
+
+            if (col < 0)
+            {
+                col = GetColumns() - 1;
+            }
+            else if (col >= GetColumns())
+            {
+                col = 0;
+            }
+
+            grid[row, col] = value;
+        }
+
+        public int GetCell(int row, int col)
+        {
+            if (row >= 0 && row < rows && col >= 0 && col < columns)
+            {
+                return grid[row, col];
+            }
+            return -1;
+        }
+
+        public void ClearCell(int row, int col)
+        {
+            if (row >= 0 && row < rows && col >= 0 && col < columns)
+            {
+                grid[row, col] = 0;
+            }
         }
     }
-
-    public int GetCell(int row, int col)
-    {
-        if(row >= 0 && row < rows && col >= 0 && col <columns )
-        {
-            return grid[row,col];
-        }
-        return -1;
-    }
-   }
-   
 }
